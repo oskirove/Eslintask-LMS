@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="./public/logos/logo1.png" alt="Logo" width="200">
+</p>
 
-## Getting Started
+<div align="center">
 
-First, run the development server:
+![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+![Clerk](https://img.shields.io/badge/Clerk-indigo?style=for-the-badge&logo=clerk&logoColor=white)
+![Appwrite](https://img.shields.io/badge/Appwrite-%23FD366E.svg?style=for-the-badge&logo=appwrite&logoColor=white)
+</div>
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<h1 align="center">Lleva tus estudios a otro nivel</h1>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+<div align="center">
+    <img src="./public/images/captura.png">
+</div>
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Recursos 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Este proyecto utiliza los siguientes recursos:
 
-## Learn More
+- **Next.js**: Un framework de React para la creación de aplicaciones web.
+- **TypeScript**: Un superset de JavaScript que añade tipos estáticos.
+- **React**: Una biblioteca de JavaScript para construir interfaces de usuario.
+- **Clerk Auth**: Una solución de autenticación para aplicaciones web.
+- **Appwrite**: Backend as a Service para almacenamiento, bases de datos...
+- **Magic UI**: Una biblioteca de componentes UI para crear interfaces de usuario atractivas.
+- **shadcn**: Una librería de componentes UI para aplicaciones web.
+- **Headless UI**: Otra librería de componentes UI para aplicaciones web.
 
-To learn more about Next.js, take a look at the following resources:
+## Uso
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Para configurar el proyecto, sigue estos pasos:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clona el repositorio:
+    ```bash
+    git clone <URL_DEL_REPOSITORIO>
+    ```
 
-## Deploy on Vercel
+2. Navega al directorio del proyecto:
+    ```bash
+    cd eslintask
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Instala las dependencias:
+    ```bash
+    npm install
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4. Crea un archivo `.env.local` en la raíz del proyecto con las siguientes claves:
+    ```env
+    CLERK_PUBLIC_KEY=your_public_key
+    CLERK_PRIVATE_KEY=your_private_key
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+    NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard
+    NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/dashboard
+    NEXT_PUBLIC_APPWRITE_PROJECT_ID=6745d0cf00359143d45b
+    NEXT_PUBLIC_DATABASE_ID=your_public_database_id
+    NEXT_PUBLIC_TODOS_COLLECTION_ID=your_public_collection_id
+    
+    ```
+
+Asegúrate de reemplazar `your_public_key` y `your_private_key` con tus claves de Clerk correspondientes y los id de Appwrite.
+
+## Estado del Proyecto
+
+>[!IMPORTANT] 
+> Este proyecto se encuentra actualmente en desarrollo. Algunas funcionalidades pueden no estar completamente implementadas o pueden cambiar en el futuro.
