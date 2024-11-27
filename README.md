@@ -57,7 +57,7 @@ Para configurar el proyecto, sigue estos pasos:
     NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
     NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard
     NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/dashboard
-    NEXT_PUBLIC_APPWRITE_PROJECT_ID=6745d0cf00359143d45b
+    NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_public_project_id
     NEXT_PUBLIC_DATABASE_ID=your_public_database_id
     NEXT_PUBLIC_TODOS_COLLECTION_ID=your_public_collection_id
     
