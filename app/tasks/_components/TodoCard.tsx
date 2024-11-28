@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
-import { AlarmClock, Clock, Hourglass, XIcon } from "lucide-react";
+import { AlarmClock, XIcon } from "lucide-react";
 import { DraggableProvidedDraggableProps, DraggableProvidedDragHandleProps } from "react-beautiful-dnd"
 
 type Props = {
@@ -74,7 +74,30 @@ function TodoCard({
                 >
                     <p className="text-xs font-semibold">{todo.priority}</p>
                 </div>
-                <div className="rounded-xl p-2 bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30">
+                <div
+                    className={`rounded-xl p-2 ${(() => {
+
+                        if (!todo.deadLine) {
+                            return "bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30";
+                        }
+
+                        const today = new Date();
+                        const deadline = new Date(todo.deadLine);
+
+                        const isToday =
+                            today.getFullYear() === deadline.getFullYear() &&
+                            today.getMonth() === deadline.getMonth() &&
+                            today.getDate() === deadline.getDate();
+
+                        const diffTime = deadline.getTime() - today.getTime();
+                        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDays === 1) return "bg-orange-200 text-orange-600 bg-opacity-30 dark:bg-orange-900 dark:text-orange-500 dark:bg-opacity-30";
+                        if (diffDays < 1) return "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30";
+                        return "bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30";
+                    })()
+                        }`}
+                >
                     <p className="flex items-center gap-1 text-xs">
                         {todo.deadLine ? (
                             (() => {
@@ -93,15 +116,15 @@ function TodoCard({
                                     ? "Acaba hoy"
                                     : diffDays > 0
                                         ? `Falta${diffDays > 1 ? 'n' : ''} ${diffDays} día${diffDays > 1 ? 's' : ''}`
-                                        : "Finalizad0!";
+                                        : "Finalizado!";
                             })()
                         ) : (
                             "Sin límite"
                         )}
                         <AlarmClock size={16} />
                     </p>
-
                 </div>
+
             </div>
         </div>
     </div>
