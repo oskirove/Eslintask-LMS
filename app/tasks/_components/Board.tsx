@@ -92,7 +92,7 @@ function Board() {
         todos: finishTodos,
       });
 
-      updateTodoInDB(todoMoved, finishCol.id);
+      updateTodoInDB(todoMoved, finishCol.id)
 
       setBoardState({ ...board, columns: newColumns });
     }
@@ -100,8 +100,8 @@ function Board() {
   }
 
   return (
-    <div className="m-3">
-      <DragDropContext onDragEnd={handleOnDragEnd}>
+    <DragDropContext onDragEnd={handleOnDragEnd}>
+      <div className="m-3">
         <Droppable droppableId="board" direction="horizontal" type="column">
           {(provided) => (
             <div
@@ -121,8 +121,8 @@ function Board() {
             </div>
           )}
         </Droppable>
-      </DragDropContext>
-    </div>
+      </div>
+    </DragDropContext>
   )
 }
 

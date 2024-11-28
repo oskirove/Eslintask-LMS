@@ -1,11 +1,11 @@
 "use client";
 
-import { Description, Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
+import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { useState } from 'react'
 
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
-import { XCircleIcon, XIcon } from "lucide-react";
+import { AlarmClock, Clock, Hourglass, XIcon } from "lucide-react";
 import { DraggableProvidedDraggableProps, DraggableProvidedDragHandleProps } from "react-beautiful-dnd"
 
 type Props = {
@@ -26,6 +26,12 @@ function TodoCard({
     dragHandleProps
 }: Props) {
 
+    const priorityColors: { [key: string]: string } = {
+        suave: "bg-green-200 text-green-600 bg-opacity-30 dark:bg-green-900 dark:text-green-500 dark:bg-opacity-30",
+        moderada: "bg-yellow-200 text-yellow-600 bg-opacity-30 dark:bg-yellow-900 dark:text-yellow-500 dark:bg-opacity-30",
+        importante: "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30",
+    };
+
     const deleteTask = useBoardStore((state) => state.deleteTask)
     let [isOpen, setIsOpen] = useState(false)
 
@@ -38,8 +44,6 @@ function TodoCard({
         <div className="">
             <div className='flex items-center justify-between'>
                 <h3 className="font-semibold">{todo.title}</h3>
-
-
                 <>
                     <Button onClick={() => setIsOpen(true)} className="rounded-full h-5 w-5" variant="destructive" size="icon"><XIcon /></Button>
                     <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-10">
@@ -53,7 +57,7 @@ function TodoCard({
                                 className="w-full max-w-md transform overflow-hidden rounded-xl bg-white dark:bg-neutral-900 p-6 text-left align-middle shadow-xl transition-all"
                             >
                                 <DialogTitle as="h3" className="text-lg font-bold leading-6 pb-2">¿Estás seguro de esto?</DialogTitle>
-                                <p className="text-sm pt-1">Esta acción eliminará tu tarea de forma permanente ¿Estás seguro de querer continuar? </p>
+                                <p className="text-sm pt-1">Esta acción eliminará tu tarea de forma permanente ¿Estás seguro de que quieres continuar? </p>
                                 <div className="flex justify-end items-center gap-4 pt-4">
                                     <Button className="rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="default" onClick={() => setIsOpen(false)}>Volver</Button>
                                     <Button variant="destructive" className="rounded-xl" onClick={() => deleteTask(index, todo, id)}>Eliminar</Button>
@@ -64,8 +68,42 @@ function TodoCard({
                 </>
             </div>
             <p className="text-sm tracking-tight text-foreground/90">{todo.description}</p>
-        </div>
+            <div className="flex justify-between items-center mt-4">
+                <div
+                    className={`rounded-xl p-2 ${priorityColors[todo.priority.toLowerCase()]}`}
+                >
+                    <p className="text-xs font-semibold">{todo.priority}</p>
+                </div>
+                <div className="rounded-xl p-2 bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30">
+                    <p className="flex items-center gap-1 text-xs">
+                        {todo.deadLine ? (
+                            (() => {
+                                const today = new Date();
+                                const deadline = new Date(todo.deadLine);
 
+                                const isToday =
+                                    today.getFullYear() === deadline.getFullYear() &&
+                                    today.getMonth() === deadline.getMonth() &&
+                                    today.getDate() === deadline.getDate();
+
+                                const diffTime = deadline.getTime() - today.getTime();
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                return isToday
+                                    ? "Acaba hoy"
+                                    : diffDays > 0
+                                        ? `Falta${diffDays > 1 ? 'n' : ''} ${diffDays} día${diffDays > 1 ? 's' : ''}`
+                                        : "Finalizad0!";
+                            })()
+                        ) : (
+                            "Sin límite"
+                        )}
+                        <AlarmClock size={16} />
+                    </p>
+
+                </div>
+            </div>
+        </div>
     </div>
 }
 

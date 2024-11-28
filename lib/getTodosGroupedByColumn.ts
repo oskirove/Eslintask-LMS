@@ -22,8 +22,9 @@ export const getTodosGroupedByColumn = async () => {
             title: todo.title,
             description: todo.description,
             status: todo.status,
-            ...(todo.image && { image: JSON.parse(todo.image) }),
-            deadline: todo.deadline
+            priority: todo.priority,
+            deadLine: todo.deadLine,
+            ...(todo.image && { image: JSON.parse(todo.image) })
         });
 
         return acc;
@@ -50,6 +51,8 @@ export const getTodosGroupedByColumn = async () => {
     const board: Board = {
         columns: sortedColumns
     }
+
+    console.log("Documentos obtenidos de Appwrite:", data.documents);
 
     return board;
 };
