@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
-import { AlarmClock, XIcon } from "lucide-react";
+import { AlarmClock, Bookmark, XIcon } from "lucide-react";
 import { DraggableProvidedDraggableProps, DraggableProvidedDragHandleProps } from "react-beautiful-dnd"
 
 type Props = {
@@ -27,9 +27,9 @@ function TodoCard({
 }: Props) {
 
     const priorityColors: { [key: string]: string } = {
-        suave: "bg-green-200 text-green-600 bg-opacity-30 dark:bg-green-900 dark:text-green-500 dark:bg-opacity-30",
-        moderada: "bg-yellow-200 text-yellow-600 bg-opacity-30 dark:bg-yellow-900 dark:text-yellow-500 dark:bg-opacity-30",
-        importante: "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30",
+        chill: "text-green-600 dark:text-green-500 ",
+        moderada: "text-yellow-600 dark:text-yellow-500 ",
+        importante: "text-red-600 dark:text-red-500 ",
     };
 
     const deleteTask = useBoardStore((state) => state.deleteTask)
@@ -70,9 +70,9 @@ function TodoCard({
             <p className="text-sm tracking-tight text-foreground/90">{todo.description}</p>
             <div className="flex justify-between items-center mt-4">
                 <div
-                    className={`rounded-xl p-2 ${priorityColors[todo.priority.toLowerCase()]}`}
+                    className={`${priorityColors[todo.priority.toLowerCase()]}`}
                 >
-                    <p className="text-xs font-semibold">{todo.priority}</p>
+                    <p className="flex items-center gap-1 text-xs"><Bookmark size={16}/>{todo.priority}</p>
                 </div>
                 <div
                     className={`rounded-xl p-2 ${(() => {
@@ -92,8 +92,9 @@ function TodoCard({
                         const diffTime = deadline.getTime() - today.getTime();
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                        if (diffDays === 1) return "bg-orange-200 text-orange-600 bg-opacity-30 dark:bg-orange-900 dark:text-orange-500 dark:bg-opacity-30";
-                        if (diffDays < 1) return "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30";
+                        if (diffDays === 1) return "bg-yellow-200 text-yellow-600 bg-opacity-30 dark:bg-yellow-900 dark:text-yellow-500 dark:bg-opacity-30";
+                        if (diffDays < 0) return "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30";
+                        if (diffDays <= 1) return "bg-orange-200 text-orange-600 bg-opacity-30 dark:bg-orange-900 dark:text-orange-500 dark:bg-opacity-30";
                         return "bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30";
                     })()
                         }`}
@@ -119,7 +120,7 @@ function TodoCard({
                                         : "Finalizado!";
                             })()
                         ) : (
-                            "Sin límite"
+                            "Sin fecha"
                         )}
                         <AlarmClock size={16} />
                     </p>

@@ -51,8 +51,6 @@ export const getTodosGroupedByColumn = async () => {
     const board: Board = {
         columns: sortedColumns
     }
-
-    console.log("Documentos obtenidos de Appwrite:", data.documents);
-
+    
     return board;
 };
