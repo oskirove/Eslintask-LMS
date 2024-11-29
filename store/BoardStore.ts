@@ -8,10 +8,16 @@ interface BoardState {
     setBoardState: (board: Board) => void;
     updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void
     newTaskInput: string;
+    newTaskDescription: string;
+    newTaskType: TypedColumn;
+    image: File | null;
 
     deleteTask: (taskIndex: number, todoId: Todo, id: TypedColumn) => void;
 
     setNewTaskInput: (input: string) => void;
+    setNewTaskDescription: (input: string) => void;
+    setNewTaskType: (columId: TypedColumn) => void
+    setImage: (image: File | null) => void;
 };
 
 export const useBoardStore = create<BoardState>((set, get) => ({
@@ -20,6 +26,10 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     },
 
     newTaskInput: "",
+    newTaskDescription: "",
+
+    newTaskType: "todo",
+    image: null,
 
     getBoard: async () => {
         const board = await getTodosGroupedByColumn()
@@ -47,6 +57,9 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     },
 
     setNewTaskInput: (input: string) => set({ newTaskInput: input }),
+    setNewTaskDescription: (input: string) => set({ newTaskDescription: input }),
+    setNewTaskType: (columId: TypedColumn) => set({ newTaskType: columId }),
+    setImage: (image: File | null) => set({ image }),
 
     updateTodoInDB: async (todo, columnId) => {
         await databases.updateDocument(

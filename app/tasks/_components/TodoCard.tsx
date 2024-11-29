@@ -5,7 +5,7 @@ import { useState } from 'react'
 
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
-import { AlarmClock, Bookmark, XIcon } from "lucide-react";
+import { AlarmClock, Bookmark, Text, XIcon } from "lucide-react";
 import { DraggableProvidedDraggableProps, DraggableProvidedDragHandleProps } from "react-beautiful-dnd"
 
 type Props = {
@@ -42,7 +42,7 @@ function TodoCard({
         className="bg-white dark:bg-neutral-800 p-2 rounded-xl drop-shadow-md"
     >
         <div className="">
-            <div className='flex items-center justify-between'>
+            <div className='flex items-center justify-between mb-1'>
                 <h3 className="font-semibold">{todo.title}</h3>
                 <>
                     <Button onClick={() => setIsOpen(true)} className="rounded-full h-5 w-5" variant="destructive" size="icon"><XIcon /></Button>
@@ -67,12 +67,13 @@ function TodoCard({
                     </Dialog>
                 </>
             </div>
-            <p className="text-sm tracking-tight text-foreground/90">{todo.description}</p>
+            <p className="flex items-center gap-2 text-sm tracking-tight text-foreground/90 "><Text size={16}/> {todo.description}</p>
+
             <div className="flex justify-between items-center mt-4">
                 <div
                     className={`${priorityColors[todo.priority.toLowerCase()]}`}
                 >
-                    <p className="flex items-center gap-1 text-xs"><Bookmark size={16}/>{todo.priority}</p>
+                    <p className="flex items-center gap-1 text-xs"><Bookmark size={16} />{todo.priority}</p>
                 </div>
                 <div
                     className={`rounded-xl p-2 ${(() => {
