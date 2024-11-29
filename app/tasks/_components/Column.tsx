@@ -4,6 +4,7 @@ import React from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import TodoCard from './TodoCard'
 import { useModalStore } from '@/store/ModalStore'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 type Props = {
     id: TypedColumn,
@@ -36,9 +37,8 @@ function Column({ id, todos, index }: Props) {
                             <div
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
-                                className={`pb-2 p-2 rounded-xl shadow-sm  ${
-                                    snapshot.isDraggingOver ? 'bg-blue-100/80 dark:bg-blue-950' : 'bg-neutral-200/40 dark:bg-neutral-900'
-                                }`}
+                                className={`pb-2 p-2 rounded-xl shadow-sm  ${snapshot.isDraggingOver ? 'bg-blue-100/80 dark:bg-blue-950' : 'bg-neutral-200/40 dark:bg-neutral-900'
+                                    }`}
                             >
                                 <h2 className="flex items-center justify-between font-bold p-2">{idToColumnText[id]}
                                     <span className="text-blue-600 dark:text-blue-500 rounded-full py-1 px-2 text-sm font-normal">{todos.length}</span>
@@ -60,16 +60,22 @@ function Column({ id, todos, index }: Props) {
                                                     dragHandleProps={provided.dragHandleProps}
                                                 />
                                             )}
-                                        </Draggable> 
+                                        </Draggable>
                                     ))}
 
                                     {provided.placeholder}
 
                                     <div>
-                                    <Button onClick={openModal} className="rounded-lg hover:bg-blue-200 hover:text-blue-600 hover:bg-opacity-30 hover:bg-blue-200/40 dark:hover:bg-blue-900 dark:hover:text-blue-500 dark:hover:bg-opacity-30" variant="ghost" size="icon">
-                                        <SquarePen className="h-[1.2rem] w-[1.2rem]"/>
-                                    </Button>
-
+                                        <Tooltip>
+                                            <TooltipTrigger>
+                                                <Button onClick={openModal} className="rounded-lg hover:bg-blue-200 hover:text-blue-600 hover:bg-opacity-30 hover:bg-blue-200/40 dark:hover:bg-blue-900 dark:hover:text-blue-500 dark:hover:bg-opacity-30" variant="ghost" size="icon">
+                                                    <SquarePen className="h-[1.2rem] w-[1.2rem]" />
+                                                </Button>
+                                            </TooltipTrigger>
+                                            <TooltipContent>
+                                                <p>Añadir tarea</p>
+                                            </TooltipContent>
+                                        </Tooltip>
                                     </div>
                                 </div>
                             </div>

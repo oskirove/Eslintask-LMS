@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 function Modal() {
     const imagePickerRef = useRef<HTMLInputElement>(null);
@@ -69,7 +70,8 @@ function Modal() {
 
                         <TaskTypeRadioGroup />
 
-                        <div className="mb-4">
+                        <div className=" flex gap-2 mb-4">
+
                             <Select>
                                 <SelectTrigger className="w-full gap-2">
                                     <SelectValue placeholder="Prioridad" />
@@ -80,30 +82,35 @@ function Modal() {
                                     <SelectItem value="Importante">🔴 Importante</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <Button
+                                        type="button"
+                                        onClick={() => {
+                                            imagePickerRef.current?.click()
+                                        }}
 
+                                        variant="default"
+                                        className="w-10 h-10 rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40">
+                                        <ImageIcon
+                                            className="h-12 w-12 inline-block"
+                                        />
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Subir imagen</p>
+                                </TooltipContent>
+
+                            </Tooltip>
                         </div>
 
                         <div>
-
-                            <Button
-                                type="button"
-                                onClick={() => {
-                                    imagePickerRef.current?.click()
-                                }}
-
-                                variant="default"
-                                className="w-full h-20 rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40">
-                                <ImageIcon
-                                    className="h-12 w-12 inline-block"
-                                />
-                                Subir imagen
-                            </Button>
                             {image && (
                                 <Image
                                     alt="Uploaded image"
                                     width={200}
                                     height={200}
-                                    className="w-full h-44 object-cover mt-2 filter hover:grayscale transition-all duration-150 cursor-not-allowed"
+                                    className="w-full h-44 rounded-xl object-cover mt-2 filter hover:grayscale transition-all duration-150 cursor-not-allowed"
                                     src={URL.createObjectURL(image)}
 
                                     onClick={() => {
@@ -124,7 +131,7 @@ function Modal() {
                         </div>
                         <div className="flex justify-end pt-4">
                             <Button className="rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="secondary">
-                                Crear
+                                Añadir tarea
                             </Button>
                         </div>
                     </DialogPanel>

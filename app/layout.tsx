@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Ubuntu } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/theme-provider";
 import { ClerkProvider } from '@clerk/nextjs'
 
 
-const inter = Inter({
-  weight: ['400', '800'],
+const ubuntu = Ubuntu({
+  weight: ['400', '700'],
   style: ['normal'],
   subsets: ['latin'],
   display: 'swap',
@@ -26,7 +26,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="es">
         <body
-          className={`${inter.className} antialiased`}
+          className={`${ubuntu.className} antialiased`}
         >
           <ThemeProvider
             attribute="class"

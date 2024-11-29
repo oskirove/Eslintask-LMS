@@ -13,7 +13,7 @@ export default function Dashboard() {
                 <BlurFade delay={0.25} inView>
                     <BannerPanel />
                     <div className="flex items-center justify-between w-full mt-2 p-3">
-                        <Button className="rounded-xl bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="secondary">
+                        <Button type="button" className="rounded-xl bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="secondary">
                             <Link href="/create" className="flex items-center gap-1">
                                 Crear <SquarePen />
                             </Link>

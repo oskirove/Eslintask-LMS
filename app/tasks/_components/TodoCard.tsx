@@ -1,8 +1,9 @@
 "use client";
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
 import { AlarmClock, Bookmark, Text, XIcon } from "lucide-react";
@@ -35,6 +36,23 @@ function TodoCard({
     const deleteTask = useBoardStore((state) => state.deleteTask)
     let [isOpen, setIsOpen] = useState(false)
 
+    const [isPending, startTransition] = useTransition();
+
+    const handleDeleteTask = async (taskIndex: number, todo: Todo, columnId: TypedColumn) => {
+        startTransition(async () => {
+            try {
+                await deleteTask(taskIndex, todo, columnId);
+    
+                setIsOpen(false);
+                toast.success("¡Tu tarea ha sido eliminada con éxito!");
+            } catch (error) {
+                console.error(error);
+                toast.error("¡Error al eliminar la tarea!");
+            }
+        });
+    };
+    
+
     return <div
         {...draggableProps}
         {...dragHandleProps}
@@ -60,15 +78,14 @@ function TodoCard({
                                 <p className="text-sm pt-1">Esta acción eliminará tu tarea de forma permanente ¿Estás seguro de que quieres continuar? </p>
                                 <div className="flex justify-end items-center gap-4 pt-4">
                                     <Button className="rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="default" onClick={() => setIsOpen(false)}>Volver</Button>
-                                    <Button variant="destructive" className="rounded-xl" onClick={() => deleteTask(index, todo, id)}>Eliminar</Button>
+                                    <Button variant="destructive" className="rounded-xl" onClick={() => handleDeleteTask(index, todo, id)}>Eliminar</Button>
                                 </div>
                             </DialogPanel>
                         </div>
                     </Dialog>
                 </>
             </div>
-            <p className="flex items-center gap-2 text-sm tracking-tight text-foreground/90 "><Text size={16}/> {todo.description}</p>
-
+                <p className="text-sm tracking-tight text-foreground/90 ">{todo.description}</p>
             <div className="flex justify-between items-center mt-4">
                 <div
                     className={`${priorityColors[todo.priority.toLowerCase()]}`}
@@ -95,7 +112,7 @@ function TodoCard({
 
                         if (diffDays === 1) return "bg-yellow-200 text-yellow-600 bg-opacity-30 dark:bg-yellow-900 dark:text-yellow-500 dark:bg-opacity-30";
                         if (diffDays < 0) return "bg-red-200 text-red-600 bg-opacity-30 dark:bg-red-900 dark:text-red-500 dark:bg-opacity-30";
-                        if (diffDays <= 1) return "bg-orange-200 text-orange-600 bg-opacity-30 dark:bg-orange-900 dark:text-orange-500 dark:bg-opacity-30";
+                        if (diffDays < 1) return "bg-orange-200 text-orange-600 bg-opacity-30 dark:bg-orange-900 dark:text-orange-500 dark:bg-opacity-30";
                         return "bg-blue-200 text-blue-600 bg-opacity-30 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30";
                     })()
                         }`}
