@@ -21,8 +21,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { DatePicker } from "./DatePicker";
+import { useAuth } from "@clerk/nextjs";
 
 function Modal() {
+    const { userId } = useAuth();
 
     const imagePickerRef = useRef<HTMLInputElement>(null);
     const newTaskDeadLine = useBoardStore((state) => state.newTaskDeadLine)
@@ -41,13 +43,15 @@ function Modal() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        if (!userId) return;
         if (!newTaskInput) return;
 
         const deadlineAsString = newTaskDeadLine instanceof Date
             ? newTaskDeadLine.toISOString().split("T")[0]
             : newTaskDeadLine;
 
-        addTask(newTaskInput, newTaskDescription, newTaskType, newTaskPriority, deadlineAsString, image)
+        addTask(userId, newTaskInput, newTaskDescription, newTaskType, newTaskPriority, deadlineAsString, image)
 
         setImage(null);
         closeModal();

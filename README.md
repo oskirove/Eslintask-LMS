@@ -53,13 +53,17 @@ Para configurar el proyecto, sigue estos pasos:
     ```env
     CLERK_PUBLIC_KEY=your_public_key
     CLERK_PRIVATE_KEY=your_private_key
+
     NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
     NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+
     NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL=/dashboard
     NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL=/dashboard
+    
     NEXT_PUBLIC_APPWRITE_PROJECT_ID=your_public_project_id
     NEXT_PUBLIC_DATABASE_ID=your_public_database_id
     NEXT_PUBLIC_TODOS_COLLECTION_ID=your_public_collection_id
+    NEXT_PUBLIC_IMAGES_STORAGE_ID=your_public_storage_id
     
     ```
 

@@ -4,13 +4,14 @@ import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useBoardStore } from "@/store/BoardStore";
 import { useEffect } from "react";
 import Column from "./Column";
+import { useAuth } from "@clerk/nextjs";
 
 //desinstalar (npm i --save-dev @types/react-beautiful-dnd) cuando se actualice el drag and drop a uno mas nuevo
 //npm uninstall react-beautifull-dnd
 //npm uninstall @types/react-beautiful-dnd
 
 function Board() {
-
+  const { userId } = useAuth(); 
   const getBoard = useBoardStore((state) => state.getBoard);
   const board = useBoardStore((state) => state.board);
   const setBoardState = useBoardStore((state) => state.setBoardState)
@@ -18,8 +19,9 @@ function Board() {
 
 
   useEffect(() => {
-    getBoard();
-  }, [getBoard]);
+    if (userId) {
+      getBoard(userId);
+  }  }, [userId, getBoard]);
 
   const handleOnDragEnd = (result: DropResult) => {
 

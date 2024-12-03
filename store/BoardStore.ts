@@ -5,7 +5,7 @@ import { create } from "zustand";
 
 interface BoardState {
     board: Board;
-    getBoard: () => void;
+    getBoard: (userId: string) => Promise<void>;
     setBoardState: (board: Board) => void;
     updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void
     newTaskInput: string;
@@ -15,7 +15,7 @@ interface BoardState {
     newTaskType: TypedColumn;
     image: File | null;
 
-    addTask: (todo: string, description: string, columId: TypedColumn, priority: string, deadLine: string, image?: File | null) => void;
+    addTask: (userId: string, todo: string, description: string, columId: TypedColumn, priority: string, deadLine: string, image?: File | null) => void;
     deleteTask: (taskIndex: number, todoId: Todo, id: TypedColumn) => void;
 
     setNewTaskInput: (input: string) => void;
@@ -27,6 +27,7 @@ interface BoardState {
 };
 
 export const useBoardStore = create<BoardState>((set, get) => ({
+
     board: {
         columns: new Map<TypedColumn, Column>()
     },
@@ -40,8 +41,12 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     newTaskType: "todo",
     image: null,
 
-    getBoard: async () => {
-        const board = await getTodosGroupedByColumn()
+    getBoard: async (userId: string) => {
+
+        if (!userId) {
+            throw new Error("Usuario no autenticado");
+        }
+        const board = await getTodosGroupedByColumn(userId)
         set({ board })
     },
 
@@ -88,7 +93,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         );
     },
 
-    addTask: async (todo: string, description: string, columId: TypedColumn, priority: string, deadLine: string | Date, image?: File | null) => {
+    addTask: async (userId: string, todo: string, description: string, columId: TypedColumn, priority: string, deadLine: string | Date, image?: File | null) => {
         let file: Image | undefined;
 
         if (image) {
@@ -108,14 +113,15 @@ export const useBoardStore = create<BoardState>((set, get) => ({
         } else {
             formattedDeadLine = new Date(new Date(deadLine).setHours(23, 59, 59, 0));
         }
-    
-        const formattedDeadLineUTC = new Date(formattedDeadLine.getTime() - formattedDeadLine.getTimezoneOffset() * 60000);    
+
+        const formattedDeadLineUTC = new Date(formattedDeadLine.getTime() - formattedDeadLine.getTimezoneOffset() * 60000);
 
         const { $id } = await databases.createDocument(
             process.env.NEXT_PUBLIC_DATABASE_ID!,
             process.env.NEXT_PUBLIC_TODOS_COLLECTION_ID!,
             ID.unique(),
             {
+                userId,
                 title: todo,
                 description: description,
                 status: columId,
@@ -136,6 +142,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
 
             const newTodo: Todo = {
                 $id,
+                userId,
                 $createdAt: new Date().toISOString(),
                 title: todo,
                 description: description,

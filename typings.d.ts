@@ -11,16 +11,25 @@ interface Column {
 
 interface Todo {
     $id: string,
+    userId:string,
     $createdAt: string,
     title: string,
     description?: string,
     status: TypedColumn,
     priority: string,
     image?: Image,
-    deadLine: string | Date
+    deadLine: string | Date,
 }
 
 interface Image {
     bucketId: string;
     fileId: string;
 }
+
+// interface User {
+//     fullname:string,
+//     email: string,
+//     image: string,
+//     firstname: string,
+//     lastname: string
+// }
