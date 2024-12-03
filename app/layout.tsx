@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Ubuntu } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/theme-provider";
 import { ClerkProvider } from '@clerk/nextjs'
 
 
-const ubuntu = Ubuntu({
-  weight: ['400', '700'],
+const ubuntu = Inter({
+  weight: ['400', '800'],
   style: ['normal'],
   subsets: ['latin'],
   display: 'swap',

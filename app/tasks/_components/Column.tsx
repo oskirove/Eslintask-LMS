@@ -5,6 +5,7 @@ import { Draggable, Droppable } from 'react-beautiful-dnd'
 import TodoCard from './TodoCard'
 import { useModalStore } from '@/store/ModalStore'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import { useBoardStore } from '@/store/BoardStore'
 
 type Props = {
     id: TypedColumn,
@@ -22,7 +23,13 @@ const idToColumnText: {
 
 function Column({ id, todos, index }: Props) {
 
+    const setNewTaskType = useBoardStore((state) => state.setNewTaskType)
     const openModal = useModalStore((state) => state.openModal)
+
+    const handleAddTodo = () => {
+        setNewTaskType(id);
+        openModal();
+    };
 
     return (
         <Draggable draggableId={id} index={index}>
@@ -68,7 +75,7 @@ function Column({ id, todos, index }: Props) {
                                     <div>
                                         <Tooltip>
                                             <TooltipTrigger>
-                                                <Button onClick={openModal} className="rounded-lg hover:bg-blue-200 hover:text-blue-600 hover:bg-opacity-30 hover:bg-blue-200/40 dark:hover:bg-blue-900 dark:hover:text-blue-500 dark:hover:bg-opacity-30" variant="ghost" size="icon">
+                                                <Button onClick={handleAddTodo} className="rounded-lg hover:bg-blue-200 hover:text-blue-600 hover:bg-opacity-30 hover:bg-blue-200/40 dark:hover:bg-blue-900 dark:hover:text-blue-500 dark:hover:bg-opacity-30" variant="ghost" size="icon">
                                                     <SquarePen className="h-[1.2rem] w-[1.2rem]" />
                                                 </Button>
                                             </TooltipTrigger>

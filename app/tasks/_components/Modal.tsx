@@ -12,18 +12,23 @@ import { useBoardStore } from '@/store/BoardStore';
 import { useModalStore } from '@/store/ModalStore';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import TaskTypeRadioGroup from './TaskTypeRadioGroup';
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 import Image from 'next/image';
-import { Bookmark, ImageIcon } from 'lucide-react';
+import { ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { DatePicker } from "./DatePicker";
 
 function Modal() {
-    const imagePickerRef = useRef<HTMLInputElement>(null);
 
+    const imagePickerRef = useRef<HTMLInputElement>(null);
+    const newTaskDeadLine = useBoardStore((state) => state.newTaskDeadLine)
+    const setNewTaskPriority = useBoardStore((state) => state.setNewTaskPriority)
+    const newTaskPriority = useBoardStore((state) => state.newTaskPriority)
+    const newTaskType = useBoardStore((state) => state.newTaskType)
     const newTaskInput = useBoardStore((state) => state.newTaskInput)
     const setNewTaskInput = useBoardStore((state) => state.setNewTaskInput)
     const newTaskDescription = useBoardStore((state) => state.newTaskDescription)
@@ -32,11 +37,25 @@ function Modal() {
     const closeModal = useModalStore((state) => state.closeModal)
     const image = useBoardStore((state) => state.image)
     const setImage = useBoardStore((state) => state.setImage)
+    const addTask = useBoardStore((state) => state.addTask)
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        if (!newTaskInput) return;
+
+        const deadlineAsString = newTaskDeadLine instanceof Date
+            ? newTaskDeadLine.toISOString().split("T")[0]
+            : newTaskDeadLine;
+
+        addTask(newTaskInput, newTaskDescription, newTaskType, newTaskPriority, deadlineAsString, image)
+
+        setImage(null);
+        closeModal();
+    }
 
     return (
         <>
-            <Dialog as="form" open={isOpen} onClose={closeModal} className="relative z-10">
+            <Dialog as="form" open={isOpen} onClose={closeModal} onSubmit={handleSubmit} className="relative z-10">
                 <DialogBackdrop
                     transition
                     className="fixed inset-0 bg-black/30 duration-300 ease-out data-[closed]:opacity-0"
@@ -71,17 +90,27 @@ function Modal() {
                         <TaskTypeRadioGroup />
 
                         <div className=" flex gap-2 mb-4">
-
-                            <Select>
+                            <Select
+                                value={newTaskPriority}
+                                onValueChange={(value) => setNewTaskPriority(value)}
+                            >
                                 <SelectTrigger className="w-full gap-2">
                                     <SelectValue placeholder="Prioridad" />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent defaultValue="Chill">
                                     <SelectItem value="Chill">🟢 Chill</SelectItem>
                                     <SelectItem value="Moderada">🟡 Moderada</SelectItem>
                                     <SelectItem value="Importante">🔴 Importante</SelectItem>
                                 </SelectContent>
                             </Select>
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <DatePicker />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Fecha límite</p>
+                                </TooltipContent>
+                            </Tooltip>
                             <Tooltip>
                                 <TooltipTrigger>
                                     <Button
@@ -100,10 +129,8 @@ function Modal() {
                                 <TooltipContent>
                                     <p>Subir imagen</p>
                                 </TooltipContent>
-
                             </Tooltip>
                         </div>
-
                         <div>
                             {image && (
                                 <Image
@@ -130,7 +157,12 @@ function Modal() {
                             />
                         </div>
                         <div className="flex justify-end pt-4">
-                            <Button className="rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40" variant="secondary">
+                            <Button
+                                type="submit"
+                                className="rounded-xl items-center bg-blue-200 text-blue-600 bg-opacity-30 hover:bg-blue-300/40 dark:bg-blue-900 dark:text-blue-500 dark:bg-opacity-30 dark:hover:bg-blue-900/40"
+                                variant="secondary"
+                                disabled={!newTaskInput}
+                            >
                                 Añadir tarea
                             </Button>
                         </div>

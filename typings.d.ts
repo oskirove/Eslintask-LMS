@@ -15,9 +15,9 @@ interface Todo {
     title: string,
     description?: string,
     status: TypedColumn,
-    priority: String,
+    priority: string,
     image?: Image,
-    deadLine: string
+    deadLine: string | Date
 }
 
 interface Image {

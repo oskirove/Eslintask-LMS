@@ -1,13 +1,15 @@
 "use client";
 
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button";
 import { useBoardStore } from "@/store/BoardStore";
 import { AlarmClock, Bookmark, Text, XIcon } from "lucide-react";
 import { DraggableProvidedDraggableProps, DraggableProvidedDragHandleProps } from "react-beautiful-dnd"
+import getUrl from '@/lib/getUrl';
+import Image from 'next/image';
 
 type Props = {
     todo: Todo;
@@ -34,6 +36,22 @@ function TodoCard({
     };
 
     const deleteTask = useBoardStore((state) => state.deleteTask)
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+
+        if (todo.image) {
+            const fetchImage = async () => {
+                const url = await getUrl(todo.image!);
+                if (url) {
+                    setImageUrl(url.toString());
+                }
+            }
+
+            fetchImage();
+        }
+    }, [todo])
+
     let [isOpen, setIsOpen] = useState(false)
 
     const [isPending, startTransition] = useTransition();
@@ -42,7 +60,7 @@ function TodoCard({
         startTransition(async () => {
             try {
                 await deleteTask(taskIndex, todo, columnId);
-    
+
                 setIsOpen(false);
                 toast.success("¡Tu tarea ha sido eliminada con éxito!");
             } catch (error) {
@@ -51,13 +69,13 @@ function TodoCard({
             }
         });
     };
-    
+
 
     return <div
         {...draggableProps}
         {...dragHandleProps}
         ref={innerRef}
-        className="bg-white dark:bg-neutral-800 p-2 rounded-xl drop-shadow-md"
+        className="bg-white dark:bg-neutral-800 p-3 rounded-xl drop-shadow-md"
     >
         <div className="">
             <div className='flex items-center justify-between mb-1'>
@@ -85,13 +103,25 @@ function TodoCard({
                     </Dialog>
                 </>
             </div>
-                <p className="text-sm tracking-tight text-foreground/90 ">{todo.description}</p>
+            <p className="text-sm tracking-tight text-foreground/90 mb-5">{todo.description}</p>
+            {imageUrl && (
+                <div className="mt-2 h-full w-full rounded-t-sm rounded-b-xl">
+                    <Image
+                        src={imageUrl}
+                        alt="Task Image"
+                        width={400}
+                        height={200}
+                        className="w-full object-contain rounded-t-sm rounded-b-xl"
+                    />
+                </div>
+            )}
             <div className="flex justify-between items-center mt-4">
                 <div
                     className={`${priorityColors[todo.priority.toLowerCase()]}`}
                 >
                     <p className="flex items-center gap-1 text-xs"><Bookmark size={16} />{todo.priority}</p>
                 </div>
+
                 <div
                     className={`rounded-xl p-2 ${(() => {
 
@@ -101,11 +131,6 @@ function TodoCard({
 
                         const today = new Date();
                         const deadline = new Date(todo.deadLine);
-
-                        const isToday =
-                            today.getFullYear() === deadline.getFullYear() &&
-                            today.getMonth() === deadline.getMonth() &&
-                            today.getDate() === deadline.getDate();
 
                         const diffTime = deadline.getTime() - today.getTime();
                         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -143,6 +168,7 @@ function TodoCard({
                         <AlarmClock size={16} />
                     </p>
                 </div>
+
 
             </div>
         </div>
